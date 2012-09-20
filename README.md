@@ -67,6 +67,7 @@ In this case model's properties will be fill in the same order as in excel file.
     ```php
         ...
         'modelFields'=>array(
+            '',
             'name',
             'age',
             'comm',
