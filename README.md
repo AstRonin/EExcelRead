@@ -8,7 +8,7 @@ Based on PHPExcel [http://www.codeplex.com/PHPExcel](http://www.codeplex.com/PHP
 ##Requirements:
 * PHP 5.2 +
 * [Yii](http://yiiframework.com) 1.1 or above
-* Extention used model [ActiveRecord](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
+* Extension used model [ActiveRecord](http://www.yiiframework.com/doc/guide/1.1/en/database.ar)
 * [PHPExcel](http://www.codeplex.com/PHPExcel) library 
 
 ##Installation
