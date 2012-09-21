@@ -39,7 +39,7 @@
  * 
  * @author Roman Shuplov <astronin@gmail.com>
  * @license http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt LGPL
- * @version 0.3 Betta
+ * @version 0.4 Betta
  */
 class EExcelRead extends CWidget {
 
@@ -81,6 +81,21 @@ class EExcelRead extends CWidget {
      * @var string
      */
     public $modelString = null;
+    
+    /**
+     * The model instance
+     *
+     * @var CActiveRecord
+     */
+    public $model = null;
+    
+    /**
+     * Extension will try find file in model property if upload file will be through model.
+     * 
+     * @see CUploadedFile
+     * @var string
+     */
+    public $modelPropertyIncludeFile = null;
 
     /**
      * Array of model properties, sequence by DB's table
@@ -151,6 +166,14 @@ class EExcelRead extends CWidget {
     public $onAfterSave;
 
     public function run() {
+        
+        if (!$this->modelString || !is_string($this->modelString)) {
+            $this->modelString = get_class($this->model);
+        }
+        if (!$this->model || !is_object($this->model)) {
+            $this->model = new $this->modelString;
+        }
+        
         if (!$this->createObjPHPExcel()) {
             Yii::log("Object PHPExcel not load", CLogger::LEVEL_ERROR, 'EExcelRead');
             return;
@@ -170,12 +193,8 @@ class EExcelRead extends CWidget {
           }
          */
 
-        if (is_object($this->modelString)) {
-            $this->modelString = get_class($this->modelString);
-        }
-
+        
         $this->checkModelFieldsInFile();
-
         $this->iteration();
 
         parent::run();
@@ -263,6 +282,13 @@ class EExcelRead extends CWidget {
                     call_user_func_array($this->onAfterSave, array($model, $relationModels, $sheetRow));
                 
             } else {
+                var_dump($sheetRow);
+                                echo '<br>';
+                                foreach ($model as $key => $value) {
+                                    print_r($key);echo '<br>';
+                                    
+                                }
+                                var_dump($model->getErrors());
                 Yii::log(print_r($model->getErrors(), true), CLogger::LEVEL_WARNING, 'EExcelRead');
             }
             $sheetRowIterator++;
@@ -304,6 +330,9 @@ class EExcelRead extends CWidget {
      */
     private function createObjPHPExcel() {
         try {
+
+            $this->findFileName();
+            
             $lib = Yii::getPathOfAlias($this->libPath) . '.php';
             if (!file_exists($lib)) {
                 Yii::log("PHP Excel lib not found($lib). Read disabled !", CLogger::LEVEL_WARNING, 'EExcelRead');
@@ -311,7 +340,7 @@ class EExcelRead extends CWidget {
             }
             spl_autoload_unregister(array('YiiBase', 'autoload'));
             Yii::import($this->libPath, true);
-
+            
             if (!$this->inputFileType) {
                 $this->inputFileType = PHPExcel_IOFactory::identify($this->inputFileName);
             }
@@ -322,7 +351,27 @@ class EExcelRead extends CWidget {
 
             return true;
         } catch (Exception $e) {
+            spl_autoload_register(array('YiiBase', 'autoload'));
             Yii::log($e->getTraceAsString(), CLogger::LEVEL_ERROR, 'EExcelRead');
+        }
+    }
+    
+    private function findFileName(){
+        if (!$this->inputFileName) {
+            $file = null;
+            if ($this->modelPropertyIncludeFile) {
+                $file = CUploadedFile::getInstance($this->model, $this->modelPropertyIncludeFile);
+            }  else {
+                $m = (array)$this->model;
+                foreach ($m as $key => $value) {
+                    $file = CUploadedFile::getInstance($this->model, $key);
+                    if ($file)
+                        break;
+                }
+            }
+            if ($file) {
+                $this->inputFileName = $file->getTempName();
+            }
         }
     }
 
