@@ -180,4 +180,4 @@ Version 0.4 (21.09.2012)
 
 
 
-PS: Extension is written after using EExcelView (unashamedly taken the idea of collbacks).
+PS: Extension is written after using EExcelView (unashamedly taken the idea of callbacks).
