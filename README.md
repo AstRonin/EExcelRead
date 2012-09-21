@@ -29,7 +29,27 @@ Add PHPExcel lybrary to:
         'modelString'=>'User',
     ));
 ```
-In this case model's properties will be fill in the same order as in excel file.
+        In this case model's properties will be fill in the same order as in excel file.
+        Be careful, if not use 'modelFields' order fields in file must be equal order fields in model.
+
+####Very simple exemple:
+#####If use this method [How to upload a file using a model](http://www.yiiframework.com/wiki/2/):
+
+```php
+<?php
+    $this->widget('ext.phpexcel.EExcelRead', array(
+        'model'=>$this,
+        'modelPropertyIncludeFile'=>'field_upload_file'
+    ));
+```
+OR 
+
+```php
+<?php
+    $this->widget('ext.phpexcel.EExcelRead', array(
+        'model'=>$this,
+    ));
+```
 
 ###Configuration:
 * libPath - The path to the PHP excel lib
@@ -48,7 +68,27 @@ In this case model's properties will be fill in the same order as in excel file.
         int - that skiped one row. Int must be set exactly as in the file. First row = 1
         array - that skiped each row from array. array(1,5,69)
 
-* modelString - Name of Model, or if set object that name of class will be get automatically.
+* modelString - Name of Model. String.
+* model - The model instance. Object.
+
+        Can set modelString as string or model as object or both.
+        
+    ```php
+        ...
+        'modelString' => 'MyModel',
+        'model'=>$this, // new MyElseModel() if use another model
+        ...
+    ``` 
+
+* modelPropertyIncludeFile - Extension will try find file in model property if upload file will be through model. See CUploadedFile
+
+    ```php
+        ...
+        'model'=>$this,
+        'modelPropertyIncludeFile'=>'field_upload_file'
+        ...
+    ```
+
 * modelDefaultFields - Fill fields static data which not set in the file or replace existing
 
     ```php
@@ -126,6 +166,17 @@ In this case model's properties will be fill in the same order as in excel file.
           
           Exemple: 'onBeforeSave'=>array($this,'uploadCallbackBeforeSave'),
         
+##Change Log
+
+Version 0.4 (21.09.2012)
+
+* Add new property: modelPropertyIncludeFile, model
+* Change work of property: modelString, now only as string
+* Add automatic manipulation with file used CUploadedFile
+* Add two methods of simple start the extension
+* Bug fixing...
+
+
 
 
 
