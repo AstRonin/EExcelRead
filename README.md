@@ -50,6 +50,7 @@ OR
         'model'=>$this,
     ));
 ```
+        In this case extension will find required field in the model.
 
 ###Configuration:
 * libPath - The path to the PHP excel lib
@@ -114,7 +115,7 @@ OR
         ),
         ...
     ```
-        for update row in the DB and if excel has identification field(like ID) add field 'id'
+        Add field 'id' for update row in the DB and if excel has identification field(like ID)
         
     ```php
         ...
