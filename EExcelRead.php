@@ -164,6 +164,8 @@ class EExcelRead extends CWidget {
      * @var mixed
      */
     public $onAfterSave;
+    
+    public $parramsEchoDone = false;
 
     public function run() {
         
@@ -292,6 +294,9 @@ class EExcelRead extends CWidget {
                 Yii::log(print_r($model->getErrors(), true), CLogger::LEVEL_WARNING, 'EExcelRead');
             }
             $sheetRowIterator++;
+        }
+        if ($parramsEchoDone) {
+            echo 'Finished.';
         }
     }
 
