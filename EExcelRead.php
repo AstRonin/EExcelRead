@@ -284,13 +284,6 @@ class EExcelRead extends CWidget {
                     call_user_func_array($this->onAfterSave, array($model, $relationModels, $sheetRow));
                 
             } else {
-                var_dump($sheetRow);
-                                echo '<br>';
-                                foreach ($model as $key => $value) {
-                                    print_r($key);echo '<br>';
-                                    
-                                }
-                                var_dump($model->getErrors());
                 Yii::log(print_r($model->getErrors(), true), CLogger::LEVEL_WARNING, 'EExcelRead');
             }
             $sheetRowIterator++;
