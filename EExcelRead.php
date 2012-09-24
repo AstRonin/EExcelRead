@@ -288,7 +288,7 @@ class EExcelRead extends CWidget {
             }
             $sheetRowIterator++;
         }
-        if ($parramsEchoDone) {
+        if ($this->parramsEchoDone) {
             echo 'Finished.';
         }
     }
